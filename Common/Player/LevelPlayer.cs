@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using LevelPlus.Common.Config;
 using LevelPlus.Common.System;
+using LevelPlus.Common.UI;
 using LevelPlus.Content.Item;
 using LevelPlus.Network;
 using Microsoft.Xna.Framework;
@@ -67,16 +68,23 @@ public class LevelPlayer : ModPlayer
         var priorLevel = Level;
         Experience += experience;
 
+        // As for why these are CombatText instead of PopupText, I just like the look more
         // Show experience gain popup
         if (Main.dedServ) return;
-        CombatText.NewText(Player.getRect(), Color.Lime,
-            Mod.GetLocalization("Stats.Level.Popup.Experience").Format(experience));
+        var xpText = Main.combatText[CombatText.NewText(Player.getRect(), Color.Lime,
+            Mod.GetLocalization("Stats.Level.Popup.Experience").Format(experience))];
+
+        xpText.lifeTime = 100;
+        xpText.velocity.Y = -4;
 
         // Show level up popup, play level up sound, and give runtime points
         if (priorLevel == Level) return;
         SoundEngine.PlaySound(new SoundStyle($"{Mod.Name}/Assets/Sounds/LevelUp"));
-        CombatText.NewText(Player.getRect(), Color.Aqua,
-            Mod.GetLocalization("Stats.Level.Popup.LevelUp").Value);
+        var levelText = Main.combatText[CombatText.NewText(Player.getRect(), Color.Red,
+            Mod.GetLocalization("Stats.Level.Popup.LevelUp").Value, true)];
+
+        levelText.lifeTime = 180;
+        levelText.velocity.Y = -6;
 
         Points += PlayConfiguration.Instance.Level.Points * (Level - priorLevel);
     }
@@ -90,7 +98,8 @@ public class LevelPlayer : ModPlayer
     public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
     {
         if (mediumCoreDeath) return [];
-        return [
+        return
+        [
             new Item(ModContent.ItemType<Respec>()),
             new Item(ModContent.ItemType<LesserScalingPotion>(), 5)
         ];
@@ -117,7 +126,7 @@ public class LevelPlayer : ModPlayer
         };
 
         itemsByMod["Terraria"][0] = startingWeapon;
-        
+
         itemsByMod[Mod.Name].Add(startingWeapon.type switch
         {
             ItemID.CopperBow => new Item(rand.Next(3) switch
