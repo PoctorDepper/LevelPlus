@@ -32,6 +32,11 @@ public class OreExperienceSystem : ModSystem
 
 public class OreExperienceTile : GlobalTile
 {
+    private bool ValidType(int type)
+    {
+        return TileID.Sets.Ore[type];
+    }
+    
     private void AddOre(Point16 pos)
     {
         switch (Main.netMode)
@@ -57,8 +62,8 @@ public class OreExperienceTile : GlobalTile
         var canPlace = base.CanPlace(i, j, type);
 
         // If it's not an ore or not a host, return whatever base is
-        if (!TileID.Sets.Ore[type]) return canPlace;
-
+        if (!ValidType(type)) return canPlace; 
+        
         // If it's false, don't bother adding it to the list
         if (!canPlace) return false;
 
@@ -73,7 +78,7 @@ public class OreExperienceTile : GlobalTile
         var canReplace = base.CanReplace(i, j, type, tileTypeBeingPlaced);
     
         // If it's not an ore or not a host, return whatever base is
-        if (!TileID.Sets.Ore[type]) return canReplace;
+        if (!ValidType(type)) return canReplace;
     
         // If it's false, don't bother adding it to the list
         if (!canReplace) return false;
@@ -86,7 +91,7 @@ public class OreExperienceTile : GlobalTile
     public override void Drop(int i, int j, int type)
     {
         // If it's not an ore or not a host, don't give XP
-        if (!TileID.Sets.Ore[type]) return;
+        if (!ValidType(type)) return;
 
         // Remove the ore from the list and don't give XP
         if (OreExperienceSystem.placedOres.Contains(new Point16(i, j)))
