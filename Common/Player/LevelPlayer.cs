@@ -35,6 +35,9 @@ public class LevelPlayer : ModPlayer
                                                                 : ""))
         .WithFormatArgs(Level, Life, Mana, GetAverageLevel());
 
+    public LocalizedText ExperienceTooltip => Mod.GetLocalization("Stats.Level.Experience")
+        .WithFormatArgs(Experience, LevelToExperience(Level + 1), LevelToExperience(Level + 1) - Experience);
+
     private int Life => Level * PlayConfiguration.Instance.Level.Life;
     private int Mana => Level * PlayConfiguration.Instance.Level.Mana;
 
@@ -77,8 +80,10 @@ public class LevelPlayer : ModPlayer
         xpText.lifeTime = 100;
         xpText.velocity.Y = -4;
 
-        // Show level up popup, play level up sound, and give runtime points
+        // Give runtime points, show level up popup, and play level up sound
         if (priorLevel == Level) return;
+        Points += PlayConfiguration.Instance.Level.Points * (Level - priorLevel);
+        
         SoundEngine.PlaySound(new SoundStyle($"{Mod.Name}/Assets/Sounds/LevelUp"));
         var levelText = Main.combatText[CombatText.NewText(Player.getRect(), Color.Red,
             Mod.GetLocalization("Stats.Level.Popup.LevelUp").Value, true)];
@@ -86,7 +91,6 @@ public class LevelPlayer : ModPlayer
         levelText.lifeTime = 180;
         levelText.velocity.Y = -6;
 
-        Points += PlayConfiguration.Instance.Level.Points * (Level - priorLevel);
     }
 
     public override void OnEnterWorld()
