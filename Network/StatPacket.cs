@@ -1,6 +1,6 @@
 using System.IO;
-using LevelPlus.Common.Player;
-using LevelPlus.Common.System;
+using LevelPlus.Players;
+using LevelPlus.Systems;
 using Terraria;
 using Terraria.ModLoader;
 

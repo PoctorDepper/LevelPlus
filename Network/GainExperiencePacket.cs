@@ -1,5 +1,5 @@
 using System.IO;
-using LevelPlus.Common.Player;
+using LevelPlus.Players;
 using Terraria;
 
 namespace LevelPlus.Network;
