@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using LevelPlus.UI;
 using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace LevelPlus.Configs;
@@ -26,4 +28,10 @@ public class UIConfig : ModConfig
 
     [DefaultValue(true)]
     public bool PointNotifier { get; set; }
+
+    public override void OnChanged()
+    {
+        base.OnChanged();
+        ModContent.GetInstance<StatUISystem>()?.UpdateConfigPositions();
+    }
 }

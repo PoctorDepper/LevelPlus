@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -31,4 +32,36 @@ public partial class PlayConfiguration : ModConfig
     [Range(0, 10)]
     [DefaultValue(3)]
     public int StartingPoints { get; set; }
+    
+    [Expand(false)]
+    [BackgroundColor(0, 0, 0)]
+    [LabelKey("$Mods.LevelPlus.Configs.ExperienceScaleConfig.Label")]
+    [TooltipKey("$Mods.LevelPlus.Configs.ExperienceScaleConfig.Tooltip")]
+    public ExperienceScaleConfig ExperienceScale { get; set; } = new();
+
+    public class ExperienceScaleConfig
+    {
+        [BackgroundColor(0, 0, 0)]
+        [Range(0f, 3f)]
+        [Increment(0.25f)]
+        [Slider]
+        [DrawTicks]
+        public float Combat { get; set; } = 1.0f;
+
+        [BackgroundColor(0, 0, 0)]
+        [Range(0f, 3f)]
+        [Increment(0.25f)]
+        [Slider]
+        [DrawTicks]
+        public float Mining { get; set; } = 1.0f;
+
+        [BackgroundColor(0, 0, 0)]
+        [Range(0f, 3f)]
+        [Increment(0.25f)]
+        [Slider]
+        [DrawTicks]
+        public float Fishing { get; set; } = 1.0f;
+
+        public override int GetHashCode() => HashCode.Combine(Combat, Mining, Fishing);
+    }
 }

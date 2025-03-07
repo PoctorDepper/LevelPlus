@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LevelPlus.Configs;
 using LevelPlus.Network;
 using LevelPlus.Players;
 using Microsoft.Xna.Framework;
@@ -45,7 +46,7 @@ public class OreExperienceTile : GlobalTile
                 OreExperienceSystem.placedOres.Add(pos);
                 break;
             case NetmodeID.MultiplayerClient:
-                var packet = new OrePlacePacket()
+                var packet = new OrePlacePacket
                 {
                     Position = pos
                 };
@@ -90,7 +91,7 @@ public class OreExperienceTile : GlobalTile
 
     public override void Drop(int i, int j, int type)
     {
-        // If it's not an ore or not a host, don't give XP
+        // If it's not an ore, don't give XP
         if (!ValidType(type)) return;
 
         // Remove the ore from the list and don't give XP
@@ -102,9 +103,10 @@ public class OreExperienceTile : GlobalTile
 
         // Grab the pos and experience this should give
         var worldPos = new Vector2(i, j) * 16;
-        var experience = new Item(TileLoader.GetItemDropFromTypeAndStyle(type)).value / 200;
-
-
+        var experience = (int) (PlayConfiguration.Instance.ExperienceScale.Mining * (new Item(TileLoader.GetItemDropFromTypeAndStyle(type)).value / 200));
+        
+        if (experience == 0) return;
+        
         switch (Main.netMode)
         {
             case NetmodeID.SinglePlayer:

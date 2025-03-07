@@ -55,8 +55,6 @@ public class ExperienceBar : UIState
         background.Append(bar);
 
         Append(background);
-
-        
     }
 
     public override void OnActivate()

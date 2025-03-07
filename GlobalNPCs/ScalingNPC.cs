@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace LevelPlus.GlobalNPCs;
 
-public class ScalingNPC : Terraria.ModLoader.GlobalNPC
+public class ScalingNPC : GlobalNPC
 {
     private static float Scalar = LevelPlayer.GetAverageLevel() * PlayConfiguration.Instance.ScalingPercentage;
 
@@ -38,7 +38,7 @@ public class ScalingNPC : Terraria.ModLoader.GlobalNPC
     public static int CalculateExperience(NPC npc)
     {
         npc.CloneDefaults(npc.netID);
-        return npc.lifeMax / 10 + npc.defense + npc.defDamage / 3;
+        return (int) (PlayConfiguration.Instance.ExperienceScale.Combat * (npc.lifeMax / 10 + npc.defense + npc.defDamage / 3));
     }
 
     public override void ModifyHitPlayer(NPC npc, Terraria.Player target, ref Terraria.Player.HurtModifiers modifiers)
@@ -59,6 +59,8 @@ public class ScalingNPC : Terraria.ModLoader.GlobalNPC
 
         var experience = CalculateExperience(npc);
 
+        if (experience == 0) return;
+        
         switch (Main.netMode)
         {
             case NetmodeID.SinglePlayer:

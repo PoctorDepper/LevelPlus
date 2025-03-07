@@ -19,6 +19,12 @@ public class StatUISystem : ModSystem
         // TODO Swap the UI states
     }
 
+    public void UpdateConfigPositions()
+    {
+        experienceBar?.OnActivate();
+        // TODO spend panel .OnActivate()
+    }
+
     public override void Load()
     {
         experienceBar = new ExperienceBar();

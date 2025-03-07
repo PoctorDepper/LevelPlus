@@ -163,7 +163,11 @@ public class LevelPlayer : ModPlayer
     // Just to get XP for fishing
     public override void ModifyCaughtFish(Item fish)
     {
-        GainExperience(fish.value / 500);
+        var experience = (int)(PlayConfiguration.Instance.ExperienceScale.Fishing * (fish.value / 1000));
+        
+        if (experience == 0) return;
+        
+        GainExperience(experience);
     }
 
     public override void Initialize() => Experience = 0;
