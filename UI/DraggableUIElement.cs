@@ -23,9 +23,9 @@ public class DraggableUIElement : UIElement
         Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
     }
 
-    public override void LeftMouseDown(UIMouseEvent evt)
+    public override void RightMouseDown(UIMouseEvent evt)
     {
-        base.LeftMouseDown(evt);
+        base.RightMouseDown(evt);
 
         // if (evt.Target != this) return;
         if (!IsMouseHovering) return;
@@ -34,9 +34,9 @@ public class DraggableUIElement : UIElement
         Dragging = true;
     }
 
-    public override void LeftMouseUp(UIMouseEvent evt)
+    public override void RightMouseUp(UIMouseEvent evt)
     {
-        base.LeftMouseUp(evt);
+        base.RightMouseUp(evt);
 
         // if (evt.Target != this) return;
         if (!IsMouseHovering) return;

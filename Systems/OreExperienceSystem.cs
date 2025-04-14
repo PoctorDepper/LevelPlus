@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LevelPlus.Configs;
 using LevelPlus.Network;
 using LevelPlus.Players;
@@ -33,9 +34,12 @@ public class OreExperienceSystem : ModSystem
 
 public class OreExperienceTile : GlobalTile
 {
+    public static bool[] Gems = TileID.Sets.Factory.CreateBoolSet(63, 64, 65, 66, 67, 68, 178);
+    
     private bool ValidType(int type)
     {
-        return TileID.Sets.Ore[type];
+        return TileID.Sets.Ore[type]
+            || Gems[type];
     }
     
     private void AddOre(Point16 pos)
@@ -103,7 +107,14 @@ public class OreExperienceTile : GlobalTile
 
         // Grab the pos and experience this should give
         var worldPos = new Vector2(i, j) * 16;
-        var experience = (int) (PlayConfiguration.Instance.ExperienceScale.Mining * (new Item(TileLoader.GetItemDropFromTypeAndStyle(type)).value / 200));
+
+        int value;
+
+        // Covers most cases (vanilla gems are absolutely broken)
+        if (TileLoader.GetTile(type) is { } tile) value = tile.GetItemDrops(i, j).Sum(item => item.value);
+        else value = new Item(TileLoader.GetItemDropFromTypeAndStyle(type)).value;
+        
+        var experience = (int) (PlayConfiguration.Instance.ExperienceScale.Mining * (value / 200));
         
         if (experience == 0) return;
         

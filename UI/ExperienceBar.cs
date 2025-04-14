@@ -33,7 +33,7 @@ public class ExperienceBar : UIState
             Height = StyleDimension.FromPixels(26f)
         };
 
-        background.OnLeftDoubleClick += delegate { ModContent.GetInstance<StatUISystem>().Toggle(); };
+        background.OnLeftClick += delegate { ModContent.GetInstance<StatUISystem>().Toggle(); };
 
         level = new UIText("0")
         {
