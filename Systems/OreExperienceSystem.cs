@@ -34,7 +34,12 @@ public class OreExperienceSystem : ModSystem
 
 public class OreExperienceTile : GlobalTile
 {
-    public static bool[] Gems = TileID.Sets.Factory.CreateBoolSet(63, 64, 65, 66, 67, 68, 178);
+    public static bool[] Gems = TileID.Sets.Factory.CreateBoolSet(TileID.Sapphire, TileID.Ruby, 
+        TileID.Emerald, TileID.Topaz, TileID.Amethyst, TileID.Diamond, TileID.ExposedGems);
+    
+    private static int[] gemDropID = TileID.Sets.Factory.CreateIntSet(-1, TileID.Sapphire, 
+        ItemID.Sapphire, TileID.Ruby, ItemID.Ruby, TileID.Emerald, ItemID.Emerald, TileID.Topaz, ItemID.Topaz, 
+        TileID.Amethyst, ItemID.Amethyst, TileID.Diamond, ItemID.Diamond);
     
     private bool ValidType(int type)
     {
@@ -110,8 +115,11 @@ public class OreExperienceTile : GlobalTile
 
         int value;
 
-        // Covers most cases (vanilla gems are absolutely broken)
-        if (TileLoader.GetTile(type) is { } tile) value = tile.GetItemDrops(i, j).Sum(item => item.value);
+        // Gem stuff, because gems tiles don't drop their gem by default...
+        if (type == TileID.ExposedGems) value = (int)gemDropID.Where(item => item != -1).Average(gem => new Item(gem).value);
+        else if (Gems[type]) value = new Item(gemDropID[type]).value;
+        // Every other ore
+        else if(TileLoader.GetTile(type) is { } tile) value = tile.GetItemDrops(i, j).Sum(item => item.value);
         else value = new Item(TileLoader.GetItemDropFromTypeAndStyle(type)).value;
         
         var experience = (int) (PlayConfiguration.Instance.ExperienceScale.Mining * (value / 200));
