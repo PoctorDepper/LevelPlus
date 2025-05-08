@@ -23,6 +23,12 @@ public partial class PlayConfiguration : ModConfig
     [Range(0f, 1f)]
     [DefaultValue(0.1f)]
     public float LossPercentage { get; set; }
+    
+    [BackgroundColor(0, 0, 0)]
+    [Increment(0.1f)]
+    [Range(0f, 1f)]
+    [DefaultValue(0.2f)]
+    public float TeamSharePercentage { get; set; }
 
     [BackgroundColor(0, 0, 0)]
     [DefaultValue(true)]

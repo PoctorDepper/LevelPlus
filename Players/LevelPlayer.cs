@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LevelPlus.Configs;
 using LevelPlus.Items;
 using LevelPlus.Network;
@@ -8,11 +9,13 @@ using LevelPlus.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Enums;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using tModPorter;
 
 namespace LevelPlus.Players;
 
@@ -65,11 +68,33 @@ public class LevelPlayer : ModPlayer
         return (long)Math.Ceiling(100f * Math.Pow(level, 11 / 5f));
     }
 
-    // Used explicitly for gaining experience legitimately 
-    public void GainExperience(long experience)
+    /// Used explicitly for gaining experience legitimately
+    /// <param name="experience">The amount of experience to cause </param>
+    /// <param name="teamShare">If the source of the experience gained comes from team share</param>
+    public void GainExperience(long experience, bool teamShare = false)
     {
         var priorLevel = Level;
-        Experience += experience;
+
+        bool shared = false;
+
+        // Ensure that the packet received was not from a share and that TeamShare is actually enabled
+        if (!teamShare && Player.team != 0 && PlayConfiguration.Instance.TeamSharePercentage != 0)
+            // Check if there are other players in the team
+            shared = Main.player.Any(player => player.whoAmI != Player.whoAmI && player.team ==  Player.team);
+        
+        // If there are other players in the team, send the team share packet to the server
+        if (shared) {
+            var packet = new TeamSharePacket
+            {
+                Amount = (long)Math.Max(1, experience * PlayConfiguration.Instance.TeamSharePercentage),
+                Team = Player.team
+            };
+
+            packet.Send();
+        }
+
+        // If the experience was shared to teammates, subtract the amount
+        Experience += (long)(experience * (shared ? 1.0 - PlayConfiguration.Instance.TeamSharePercentage : 1.0));
 
         // As for why these are CombatText instead of PopupText, I just like the look more
         // Show experience gain popup
@@ -164,9 +189,9 @@ public class LevelPlayer : ModPlayer
     public override void ModifyCaughtFish(Item fish)
     {
         var experience = (int)(PlayConfiguration.Instance.ExperienceScale.Fishing * (fish.value / 1000));
-        
+
         if (experience == 0) return;
-        
+
         GainExperience(experience);
     }
 
