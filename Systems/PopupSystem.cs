@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace LevelPlus.Systems;
@@ -8,11 +9,11 @@ namespace LevelPlus.Systems;
 [Autoload(Side = ModSide.Client)]
 public class PopupSystem : ModSystem
 {
-    private static string LevelUp;
+    private static LocalizedText LevelUp;
     
     public override void Load()
     {
-        LevelUp = Mod.GetLocalization("Stats.Level.Popup.LevelUp").Value;
+        LevelUp = Mod.GetLocalization("Stats.Level.Popup.LevelUp");
     }
 
     public override void Unload()
@@ -25,7 +26,7 @@ public class PopupSystem : ModSystem
     {
         Main.combatText
             .Where(t => t.active &&
-                        t.text == LevelUp)
+                        t.text == LevelUp.Value)
             .ToList()
             .ForEach(t => t.color = Main.DiscoColor);
     }
