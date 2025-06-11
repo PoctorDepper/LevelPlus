@@ -14,7 +14,7 @@ public class KeybindSystem : ModSystem
 
     public override void Load()
     {
-        ToggleStatUI = KeybindLoader.RegisterKeybind(Mod, Language.GetTextValue("ToggleStatUI"), Keys.P);
+        ToggleStatUI = KeybindLoader.RegisterKeybind(Mod, Language.GetTextValue("ToggleStatUI"), Keys.O);
         SpendMultFive = KeybindLoader.RegisterKeybind(Mod, Language.GetTextValue("SpendMultFive"), Keys.LeftShift);
         SpendMultTen = KeybindLoader.RegisterKeybind(Mod, Language.GetTextValue("SpendMultTen"), Keys.LeftControl);
         SpendMultTwenty = KeybindLoader.RegisterKeybind(Mod, Language.GetTextValue("SpendMultTwenty"), Keys.LeftAlt);
