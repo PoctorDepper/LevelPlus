@@ -1,1 +1,15 @@
 A simple leveling experience to enhance your gameplay.
+
+Adds the opportunity to gain experience from killing mobs, mining, and fishing. Gaining enough experience can cause the player's level to increase, giving them points.
+These points can be spent to increase specific attributes of the player, causing their power to increase in various aspects.
+
+Attributes:
+- Brawn increases physical power, such as melee damage.
+- Charm increases influence over other creatures, bolstering summons.
+- Deft increases dexterity, increasing ranged damage.
+- Endurance increases how many hits one can take before falling.
+- Intellect increases connection with their magical ability, powering up magic damage.
+- Luck increases one's luck.
+
+
+
