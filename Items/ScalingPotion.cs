@@ -16,7 +16,8 @@ public class ScalingPotion : ModItem
         Item.width = 20;
         Item.height = 28;
         Item.useTime = 17;
-        Item.useAnimation = ItemUseStyleID.DrinkLiquid;
+        Item.useStyle = ItemUseStyleID.DrinkLiquid;
+        Item.useAnimation = 15;
         Item.UseSound = SoundID.Item3;
         Item.useTurn = true;
         Item.maxStack = Item.CommonMaxStack;
