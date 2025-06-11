@@ -10,6 +10,8 @@
 
 	<!-- References -->
 	<ItemGroup>
+		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+		
 		<Reference Include="CalamityMod">
 			<HintPath>..\ModAssemblies\CalamityMod_v2.0.3.9.dll</HintPath>
 		</Reference>
