@@ -105,7 +105,7 @@ internal class BarBackground : DraggableUIElement
         texture = mod.Assets.Request<Texture2D>("Assets/Textures/UI/Bar_Background");
         outline = mod.Assets.Request<Texture2D>("Assets/Textures/UI/Bar_Outline");
 
-        OnLeftMouseUp += UpdateConfig;
+        OnDragEnd += UpdateConfig;
     }
 
     private void UpdateConfig(UIMouseEvent evt, UIElement element)
